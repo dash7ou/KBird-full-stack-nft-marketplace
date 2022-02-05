@@ -38,4 +38,11 @@ contract ERC721 {
         // return 0;
         // }
     }
+
+    function ownerOf(uint256 _tokenId) external view returns (address) {
+        address owner = _tokenOwner[_tokenId];
+        require(owner != address(0), "Invalid owner address");
+
+        return owner;
+    }
 }
