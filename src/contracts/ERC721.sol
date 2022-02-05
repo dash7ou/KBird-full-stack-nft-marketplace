@@ -28,4 +28,14 @@ contract ERC721 {
 
         emit Transfer(address(0), to, tokenId);
     }
+
+    function balanceOf(address _owner) public view returns (uint256) {
+        require(_owner != address(0), "Invalid owner address");
+
+        // if (_OwnedTokenCounter[_owner]) {
+        return _OwnedTokenCounter[_owner];
+        // } else {
+        // return 0;
+        // }
+    }
 }
