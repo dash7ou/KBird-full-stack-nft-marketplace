@@ -39,12 +39,31 @@ contract ERC721 is ERC165, IERC721 {
         // }
     }
 
+    function _transferFrom(
+        address _from,
+        address _to,
+        uint256 _tokenId
+    ) internal {
+        require(_to != address(0), "ERC721 Transfer to the zero address");
+        require(
+            _from == ownerOf(_tokenId),
+            "Trying to transfer a token the address does not own!"
+        );
+
+        _OwnedTokenCounter[_from] -= 1;
+        _OwnedTokenCounter[_to] += 1;
+
+        _tokenOwner[_tokenId] = _to;
+        emit Transfer(_from, _to, _tokenId);
+    }
+
     function transferFrom(
         address _from,
         address _to,
         uint256 _tokenId
     ) public override {
         require(isApprovedOrOwner(msg.sender, _tokenId));
+        _transferFrom(_from, _to, _tokenId);
     }
 
     function ownerOf(uint256 _tokenId) public view returns (address) {
