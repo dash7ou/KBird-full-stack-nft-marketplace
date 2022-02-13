@@ -41,7 +41,7 @@ contract("KryptoBird", async accounts => {
 
     describe("minting", () => {
         it("create a new token", async () => {
-            const result = await contract.mint("https....111");
+            const result = await contract.mint("https....1");
             const totalSupply = await contract.totalSupply();
 
 
@@ -50,7 +50,27 @@ contract("KryptoBird", async accounts => {
             assert.equal(event._from, 0x0000000000000000000000000000000000000000, "from is the contract");
             assert.equal(event._to, accounts[0], "to is msg.sender");
 
-            await contract.mint("https....111").should.be.rejected;
+            await contract.mint("https....1").should.be.rejected;
+        })
+    })
+
+    describe("indexing", () => {
+        it("list kryptoBirdz", async () => {
+            await contract.mint("https....2");
+            await contract.mint("https....3");
+            await contract.mint("https....4");
+            await contract.mint("https....5");
+            const totalSupply = await contract.totalSupply();
+
+            let result = [];
+
+            for (let i = 0; i < totalSupply; i++) {
+                const kryptoBirdItem = await contract.kryptoBirdz(i);
+                result.push(kryptoBirdItem);
+            }
+
+            const expected = ["https....1", "https....2", "https....3", "https....4", "https....5"]
+            assert.equal(result.join(","), expected.join(","))
         })
     })
 })
