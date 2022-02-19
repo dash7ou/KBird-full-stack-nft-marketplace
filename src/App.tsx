@@ -44,7 +44,17 @@ function App() {
     try{
       const accounts  = await web3.eth.getAccounts();
       setAccounts(accounts)
+      const networkId = await web3.eth.net.getId();
+      const networkData = JSON.parse(JSON.stringify(KryptoBird)).networks[networkId];
+      if(networkData){
+        const abi = KryptoBird.abi;
+        const address = networkData.address;
+        const contract = new web3.eth.Contract(abi, address);
+        console.log(contract);
+      }
+
     }catch(err: any){ 
+      console.log(err);
     }
   }
 
