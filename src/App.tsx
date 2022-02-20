@@ -1,6 +1,14 @@
 import { useEffect,useState  } from "react";
 import Web3 from "web3";
 import detectedEthereumProvider from "@metamask/detect-provider";
+import {
+  MDBCard,
+  MDBCardBody,
+  MDBCardTitle,
+  MDBCardText,
+  MDBCardImage,
+  MDBBtn
+} from "mdb-react-ui-kit"
 // import  {Provider} from "@ethersproject/abstract-provider";
 // import Provider from "@ethersproject/providers";
 
@@ -16,6 +24,9 @@ function App() {
   const [totalSupply, setTotalSupply] = useState<number>(0);
   const [kryptoBirdz, setKryptoBirdz] = useState<Array<any>>([]);
   const [inputValue, setInputValue] = useState<string>("")
+
+
+  console.log(kryptoBirdz)
 
 
   useEffect(()=>{
@@ -60,15 +71,17 @@ function App() {
         setTotalSupply(totalSupply);
         console.log(totalSupply)
 
+        const results= []
         for(let i=0; i<totalSupply; i++){
           const kryptoBirdItem = await contract.methods.kryptoBirdz(i).call();
-          setKryptoBirdz(
-            [
-              ...kryptoBirdz,
-              kryptoBirdItem
-            ]
-          )
+          results.push(kryptoBirdItem)
         }
+        setKryptoBirdz(
+          [
+            ...kryptoBirdz,
+            ...results
+          ]
+        )
       }
 
     }catch(err: any){ 
@@ -108,9 +121,9 @@ function App() {
      </nav>
      <div className="container-fluid mt-1">
         <div className="row">
-          <main role="main" className="col-lg-12 d-flex text-center">
+          <main style={{"margin": "1rem", "marginBottom": "3rem"}} role="main" className="col-lg-12 d-flex text-center">
             <div className="content mr-auto ml-auto" style={{ opacity: "0.8" }}>
-              <h1 style={{color: "white"}}>KryptoBirdz NFT MarketBlace</h1>
+              <h1>KryptoBirdz NFT MarketBlace</h1>
               <form onSubmit={(event)=>{
                 event.preventDefault();
                 console.log(inputValue)
@@ -126,6 +139,25 @@ function App() {
               </form>
             </div>
           </main>
+          <hr></hr>
+          <div className="row textCenter">
+            {
+              kryptoBirdz.map((bird, key)=> (
+                <div key={key}>
+                  <div>
+                    <MDBCard className="token img" style={{maxWidth: "22rem"}}>
+                      <MDBCardImage src={bird} position="top" style={{ marginRight: "4px"}} />
+                      <MDBCardBody>
+                        <MDBCardTitle>KryptoBirdz</MDBCardTitle>
+                        <MDBCardText>The KryptoBirdz are 20 uniquely generated KBirdz from the cyberpunk galaxy! there is one of each bird and each bird can be owned by single person!</MDBCardText>
+                        <MDBBtn href={bird}>Download</MDBBtn>
+                      </MDBCardBody>
+                    </MDBCard>
+                  </div>
+                </div>
+              ))
+            }
+          </div>
         </div>
      </div>
    </div>
