@@ -12,6 +12,9 @@ import './App.css';
 function App() {
   // const [web3, setWeb3]: any = useState(null);
   const [accounts, setAccounts] = useState<Array<string>>([]);
+  const [contract, setContract] = useState<any>(null);
+  const [totalSupply, setTotalSupply] = useState<number>(0);
+  const [kryptoBirdz, setKryptoBirdz] = useState<Array<any>>([]);
 
   useEffect(()=>{
     const loadingData = async ()=>{
@@ -50,7 +53,20 @@ function App() {
         const abi = KryptoBird.abi;
         const address = networkData.address;
         const contract = new web3.eth.Contract(abi, address);
-        console.log(contract);
+        setContract(contract);
+        const totalSupply = await contract.methods.totalSupply().call();
+        setTotalSupply(totalSupply);
+        console.log(totalSupply)
+
+        for(let i=0; i<totalSupply; i++){
+          const kryptoBirdItem = await contract.methods.kryptoBirdz(i).call();
+          setKryptoBirdz(
+            [
+              ...kryptoBirdz,
+              kryptoBirdItem
+            ]
+          )
+        }
       }
 
     }catch(err: any){ 
