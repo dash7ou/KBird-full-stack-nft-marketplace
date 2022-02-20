@@ -15,6 +15,8 @@ function App() {
   const [contract, setContract] = useState<any>(null);
   const [totalSupply, setTotalSupply] = useState<number>(0);
   const [kryptoBirdz, setKryptoBirdz] = useState<Array<any>>([]);
+  const [inputValue, setInputValue] = useState<string>("")
+
 
   useEffect(()=>{
     const loadingData = async ()=>{
@@ -74,6 +76,21 @@ function App() {
     }
   }
 
+  const mint = (bird: any)=>{
+    try{
+      contract.methods.mint(bird).send({ from: accounts[0]}).once("receipt", ()=>{
+        setKryptoBirdz(
+          [
+            ...kryptoBirdz,
+            bird
+          ]
+        )
+      })
+    }catch(err: any){
+
+    }
+  }
+
   return (
    <div>
      <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
@@ -89,6 +106,28 @@ function App() {
           </li>
         </ul>
      </nav>
+     <div className="container-fluid mt-1">
+        <div className="row">
+          <main role="main" className="col-lg-12 d-flex text-center">
+            <div className="content mr-auto ml-auto" style={{ opacity: "0.8" }}>
+              <h1 style={{color: "white"}}>KryptoBirdz NFT MarketBlace</h1>
+              <form onSubmit={(event)=>{
+                event.preventDefault();
+                console.log(inputValue)
+                mint(inputValue);
+              }}>
+                <input 
+                  type={"text"}
+                  placeholder="Add a file location"
+                  className="form-control mb-1"
+                  onChange={(input:any) => setInputValue(input.target.value)}
+                />
+                <input type="submit" className="btn btn-primary btn-black" value="MINT"/>
+              </form>
+            </div>
+          </main>
+        </div>
+     </div>
    </div>
   );
 }
