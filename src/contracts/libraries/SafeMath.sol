@@ -13,6 +13,29 @@ library SafeMath {
         uint256 r = x - y;
         return r;
     }
+
+    function mul(uint256 x, uint256 y) internal pure returns (uint256) {
+        // gas optimization
+        if (x == 0) {
+            return 0;
+        }
+
+        uint256 r = x * y;
+        require(r / x == y, "SafeMath: multiplication overflow");
+        return r;
+    }
+
+    function divide(uint256 x, uint256 y) internal pure returns (uint256) {
+        require(y > 0, "SafeMath: division by zero");
+        uint256 r = x / y;
+        return r;
+    }
+
+    // gas spending remains untouched
+    function mod(uint256 x, uint256 y) internal pure returns (uint256) {
+        require(y != 0, "Safemath: division by zero");
+        return x % y;
+    }
 }
 
 /**
