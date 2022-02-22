@@ -13,7 +13,7 @@ library Counters {
         return counter._value;
     }
 
-    function increment(counter storage counter) internal {
+    function increment(Counter storage counter) internal {
         counter._value += 1;
     }
 
